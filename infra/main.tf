@@ -13,6 +13,14 @@ module "storage_account" {
   tags                = local.common_tags
 }
 
+module "acr" {
+  source = "./modules/acr"
+
+  acr_name = replace("${local.name_prefix}acr", "-", "")
+  resource_group_name = module.resource_group.name
+  location            = var.location
+}
+
 module "vnet" {
   source              = "./modules/vnet"
   name_prefix         = local.name_prefix
