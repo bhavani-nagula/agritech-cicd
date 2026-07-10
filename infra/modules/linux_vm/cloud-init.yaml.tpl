@@ -21,7 +21,7 @@ runcmd:
 
  - sleep 30
 
- - git clone https://github.com/bhavani-nagula/docker-frontend-code.git /opt/agritech
+ - git clone https://github.com/bhavani-nagula/agritech-cicd.git /opt/agritech
 
  - bash -c 'cd /opt/agritech/docker-compose && docker-compose up -d --build'
 
