@@ -26,3 +26,20 @@ stages:
         pwd
         ls -R
       displayName: "Verify Repository"
+
+    - task: JavaToolInstaller@0
+      displayName: "Install Java 17"
+      inputs:
+        versionSpec: '17'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
+
+    - task: Maven@4
+      displayName: "Build Backend"
+      inputs:
+        mavenPomFile: 'backend/pom.xml'
+        goals: 'clean package'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17'
+        mavenVersionOption: 'Default'
