@@ -43,3 +43,66 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.17'
         mavenVersionOption: 'Default'
+
+- stage: Terraform
+  displayName: "Terraform Stage"
+  dependsOn: Build
+
+  jobs:
+
+  - job: Terraform
+    displayName: "Terraform Deployment"
+
+    steps:
+
+    - checkout: self
+
+    - task: TerraformInstaller@1
+      displayName: "Install Terraform"
+      inputs:
+        terraformVersion: 'latest'
+
+    - script: |
+        cd infra
+
+        cat > terraform.auto.tfvars <<EOF
+        subscription_id = "$(subscription_id)"
+        tenant_id       = "$(tenant_id)"
+        client_id       = "$(client_id)"
+        client_secret   = "$(client_secret)"
+        EOF
+
+      displayName: "Create Terraform Variables"
+
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Init"
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: 'infra'
+        backendServiceArm: 'agritech-azure-connection'
+        backendAzureRmUseEntraIdForAuthentication: true
+
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Validate"
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: 'infra'
+
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Plan"
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: 'infra'
+        environmentServiceNameAzureRM: 'agritech-azure-connection'
+
+    - task: TerraformTaskV4@4
+      displayName: "Terraform Apply"
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        commandOptions: '-auto-approve'
+        workingDirectory: 'infra'
+        environmentServiceNameAzureRM: 'agritech-azure-connection'
