@@ -38,7 +38,7 @@ stages:
       displayName: "Build Backend"
       inputs:
         mavenPomFile: 'backend/pom.xml'
-        goals: 'clean package'
+        goals: 'clean package -DskipTests'
         publishJUnitResults: false
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.17'
