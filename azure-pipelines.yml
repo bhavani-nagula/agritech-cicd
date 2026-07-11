@@ -96,7 +96,7 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: 'infra'
-        environmentServiceNameAzureRM: 'agritech-azure-connection'
+        environmentServiceNameAzureRM: 'agritech-azure-connectionn'
 
     - task: TerraformTaskV4@4
       displayName: "Terraform Apply"
