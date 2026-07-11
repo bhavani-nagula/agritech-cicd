@@ -80,7 +80,7 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: 'infra'
-        backendServiceArm: 'agritech-azure-connection'
+        backendServiceArm: 'agritech-azure-connectionn'
         backendAzureRmUseEntraIdForAuthentication: true
 
     - task: TerraformTaskV4@4
@@ -105,4 +105,4 @@ stages:
         command: 'apply'
         commandOptions: '-auto-approve'
         workingDirectory: 'infra'
-        environmentServiceNameAzureRM: 'agritech-azure-connection'
+        environmentServiceNameAzureRM: 'agritech-azure-connectionn'
