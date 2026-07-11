@@ -70,6 +70,7 @@ stages:
         tenant_id       = "$(tenant_id)"
         client_id       = "$(client_id)"
         client_secret   = "$(client_secret)"
+        ssh_public_key  = "$(ssh_public_key)"
         EOF
       displayName: "Create Terraform Variables"
 
