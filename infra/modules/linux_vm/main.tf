@@ -7,7 +7,10 @@ resource "azurerm_linux_virtual_machine" "this" {
   network_interface_ids = [var.nic_id]
   tags                  = var.tags
 
-  custom_data = base64encode(file("${path.module}/cloud-init.yaml.tpl"))
+  custom_data = base64encode(templatefile("${path.module}/cloud-init.yaml.tpl", {
+  acr_username = var.acr_username
+  acr_password = var.acr_password
+  }))
 
   identity {
     type = "SystemAssigned"

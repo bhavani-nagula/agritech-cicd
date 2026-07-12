@@ -103,6 +103,8 @@ stages:
         client_id       = "$(client_id)"
         client_secret   = "$(client_secret)"
         ssh_public_key  = "$(ssh_public_key)"
+        acr_username   = "$(acr_username)"
+        acr_password   = "$(acr_password)"
         EOF
       displayName: "Create Terraform Variables"
 

@@ -68,4 +68,6 @@ module "linux_vm" {
   ssh_public_key      = var.ssh_public_key
   vm_size             = var.vm_size
   tags                = local.common_tags
+  acr_username = var.acr_username
+  acr_password = var.acr_password
 }

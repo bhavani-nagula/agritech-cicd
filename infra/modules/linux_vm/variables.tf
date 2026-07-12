@@ -9,3 +9,11 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+variable "acr_username" {
+  type = string
+}
+
+variable "acr_password" {
+  type      = string
+  sensitive = true
+}
