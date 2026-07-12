@@ -21,8 +21,7 @@ services:
     restart: always
 
   backend:
-    build:
-      context: ../backend
+    image: agritechdevacr.azurecr.io/agritech-backend:latest
 
     container_name: agritech-backend
 
@@ -35,8 +34,7 @@ services:
     restart: always
 
   frontend:
-    build:
-      context: ../frontend
+    image: agritechdevacr.azurecr.io/agritech-frontend:latest
 
     container_name: agritech-frontend
 

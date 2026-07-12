@@ -9,6 +9,8 @@ variables:
 
 stages:
 
+# ================= BUILD STAGE =================
+
 - stage: Build
   displayName: "Build Stage"
 
@@ -43,6 +45,36 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '1.17'
         mavenVersionOption: 'Default'
+
+    - task: Docker@2
+      displayName: "Login to ACR"
+      inputs:
+        command: login
+        containerRegistry: 'agritech-acr-connection'
+
+    - task: Docker@2
+      displayName: "Build and Push Backend"
+      inputs:
+        command: buildAndPush
+        repository: agritech-backend
+        dockerfile: backend/Dockerfile
+        buildContext: backend
+        containerRegistry: 'agritech-acr-connection'
+        tags: |
+          latest
+
+    - task: Docker@2
+      displayName: "Build and Push Frontend"
+      inputs:
+        command: buildAndPush
+        repository: agritech-frontend
+        dockerfile: frontend/Dockerfile
+        buildContext: frontend
+        containerRegistry: 'agritech-acr-connection'
+        tags: |
+          latest
+
+# ================= TERRAFORM STAGE =================
 
 - stage: Terraform
   displayName: "Terraform Stage"
