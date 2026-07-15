@@ -78,7 +78,6 @@ stages:
 
 - stage: Terraform
   displayName: "Terraform Stage"
-  dependsOn: Build
 
   jobs:
 
