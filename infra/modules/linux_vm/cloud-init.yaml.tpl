@@ -6,29 +6,45 @@ package_upgrade: true
 packages:
   - docker.io
   - docker-compose
-  - git
   - curl
   - unzip
 
 runcmd:
 
   - systemctl enable docker
-
   - systemctl start docker
 
-  - sleep 30
-
-  # Login to Azure Container Registry
-  - docker login agritechdevacr.azurecr.io -u ${acr_username} -p ${acr_password}
-
-  # Create application directory
   - mkdir -p /opt/agritech
 
-  # Download latest docker-compose file
   - curl -L -o /opt/agritech/docker-compose.yaml https://raw.githubusercontent.com/bhavani-nagula/agritech-cicd/main/docker-compose/docker-compose.yaml
 
-  # Pull latest images from ACR
-  - bash -c "cd /opt/agritech && docker-compose pull"
+  - |
+      cat > /opt/agritech/deploy.sh <<'EOF'
+      #!/bin/bash
 
-  # Start containers
-  - bash -c "cd /opt/agritech && docker-compose up -d"
+      docker login agritechdevacr.azurecr.io \
+        -u ${acr_username} \
+        -p ${acr_password}
+
+      until docker pull agritechdevacr.azurecr.io/agritech-backend:latest
+      do
+        echo "Waiting for backend image..."
+        sleep 20
+      done
+
+      until docker pull agritechdevacr.azurecr.io/agritech-frontend:latest
+      do
+        echo "Waiting for frontend image..."
+        sleep 20
+      done
+
+      cd /opt/agritech
+
+      docker-compose pull
+
+      docker-compose up -d
+      EOF
+
+  - chmod +x /opt/agritech/deploy.sh
+
+  - nohup /opt/agritech/deploy.sh >/var/log/deploy.log 2>&1 &

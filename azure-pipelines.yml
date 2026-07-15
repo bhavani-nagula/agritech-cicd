@@ -11,68 +11,68 @@ stages:
 
 # ================= BUILD STAGE =================
 
-- stage: Build
-  displayName: "Build Stage"
-
-  jobs:
-
-  - job: Build
-    displayName: "Build Application"
-
-    steps:
-
-    - checkout: self
-
-    - script: |
-        echo "Repository cloned successfully"
-        pwd
-        ls -R
-      displayName: "Verify Repository"
-
-    - task: JavaToolInstaller@0
-      displayName: "Install Java 17"
-      inputs:
-        versionSpec: '17'
-        jdkArchitectureOption: 'x64'
-        jdkSourceOption: 'PreInstalled'
-
-    - task: Maven@4
-      displayName: "Build Backend"
-      inputs:
-        mavenPomFile: 'backend/pom.xml'
-        goals: 'clean package -DskipTests'
-        publishJUnitResults: false
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.17'
-        mavenVersionOption: 'Default'
-
-    - task: Docker@2
-      displayName: "Login to ACR"
-      inputs:
-        command: login
-        containerRegistry: 'agritech-acr-connection'
-
-    - task: Docker@2
-      displayName: "Build and Push Backend"
-      inputs:
-        command: buildAndPush
-        repository: agritech-backend
-        dockerfile: backend/Dockerfile
-        buildContext: backend
-        containerRegistry: 'agritech-acr-connection'
-        tags: |
-          latest
-
-    - task: Docker@2
-      displayName: "Build and Push Frontend"
-      inputs:
-        command: buildAndPush
-        repository: agritech-frontend
-        dockerfile: frontend/Dockerfile
-        buildContext: frontend
-        containerRegistry: 'agritech-acr-connection'
-        tags: |
-          latest
+#- stage: Build
+#  displayName: "Build Stage"
+#
+#  jobs:
+#
+#  - job: Build
+#    displayName: "Build Application"
+#
+#    steps:
+#
+#    - checkout: self
+#
+#    - script: |
+#        echo "Repository cloned successfully"
+#        pwd
+#        ls -R
+#      displayName: "Verify Repository"
+#
+#    - task: JavaToolInstaller@0
+#      displayName: "Install Java 17"
+#      inputs:
+#        versionSpec: '17'
+#        jdkArchitectureOption: 'x64'
+#        jdkSourceOption: 'PreInstalled'
+#
+#    - task: Maven@4
+#      displayName: "Build Backend"
+#      inputs:
+#        mavenPomFile: 'backend/pom.xml'
+#        goals: 'clean package -DskipTests'
+#        publishJUnitResults: false
+#        javaHomeOption: 'JDKVersion'
+#        jdkVersionOption: '1.17'
+#        mavenVersionOption: 'Default'
+#
+#    - task: Docker@2
+#      displayName: "Login to ACR"
+#      inputs:
+#        command: login
+#        containerRegistry: 'agritech-acr-connection'
+#
+#    - task: Docker@2
+#      displayName: "Build and Push Backend"
+#      inputs:
+#        command: buildAndPush
+#        repository: agritech-backend
+#        dockerfile: backend/Dockerfile
+#        buildContext: backend
+#        containerRegistry: 'agritech-acr-connection'
+#        tags: |
+#          latest
+#
+#    - task: Docker@2
+#      displayName: "Build and Push Frontend"
+#      inputs:
+#        command: buildAndPush
+#        repository: agritech-frontend
+#        dockerfile: frontend/Dockerfile
+#        buildContext: frontend
+#        containerRegistry: 'agritech-acr-connection'
+#        tags: |
+#          latest
 
 # ================= TERRAFORM STAGE =================
 
